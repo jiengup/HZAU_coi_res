@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <style>
+        *{
+            margin:0 auto; /*div等元素居中方法*/
+            padding:0;
+            border:0;
+        }
+        #header{
+            width:100%; height:100px;
+            border-bottom:1px dashed gray;
+            text-align: center; /*水平居中*/
+            line-height: 80px;vertical-align: middle;
+            font-size: 60px;
+            padding-top:10px;
+            
+            /*增加样式*/
+            color:red;
+        }        
+        #content{
+            width:100%; height:730px;
+            border:1px dashed gray; 
+            text-align: center; /*水平居中*/
+            line-height: 50px; vertical-align: middle;
+            color:blue;
+            padding-top: 20px; 
+            font-size: 40px;           
+        }
+        #footer{
+            width:100%; height:60px;
+            border-top:1px dashed gray;
+            text-align: center; /*水平居中*/
+            line-height: 25px; vertical-align: middle;              
+            font-size: 20px;          
+            padding-top: 20px;
+            font-weight: bold;
+        }
+            
+    </style>
+    <script>
+    </script>
+</head>
+<body>
+    <div>
+        <div id="header">
+            {{ header }} 
+        </div>
+        <div id="content">
+                {{ content }}                                          
+        </div>
+        <div id="footer">
+            technology support and all rights reserve @wpf<br/>
+            colloge of informatics, huazhong agricultural university
+        </div>
+    </div>
+</body>
+</html>

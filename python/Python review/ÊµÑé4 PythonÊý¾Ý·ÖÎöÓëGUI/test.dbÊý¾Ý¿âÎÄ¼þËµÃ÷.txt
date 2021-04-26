@@ -1,0 +1,1 @@
+test.db数据库文件内有一张学生表student(sid,sname,ssex,sage,sclass)

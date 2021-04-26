@@ -1,0 +1,58 @@
+{
+  "name": "__MSG_extName__",
+  "default_locale": "en",
+  "manifest_version": 2,
+  "version": "0.1072",
+  "version_name": "2.3.1",
+  "offline_enabled": true,
+  "app": {
+    "background": {
+      "page": "app_main.html"
+    }
+  },
+  "icons": {
+    "16": "icon.png",
+    "128": "icon.png"
+  },
+  "permissions": [
+    "notifications",
+    "clipboardRead",
+    "accessibilityFeatures.read",
+    "identity",
+    "videoCapture",
+    {"socket": ["tcp-connect", "tcp-listen", "udp-bind", "udp-send-to", "resolve-host", "resolve-proxy"]},
+    "identity.email",
+    "geolocation",
+    "unlimitedStorage",
+    {"fileSystem": ["write"]},
+    "https://clients2.google.com/",
+    "clipboardWrite",
+    "alarms",
+    "storage",
+    "overrideEscFullscreen",
+    "fullscreen",
+    "audioCapture"]
+,
+  "requirements": {
+    "3D": {
+      "features": ["webgl"]
+    }
+  },
+  "kiosk_enabled": true,
+  "import": [{"id": "mfaihdlpglflfgpfjcifdjdjcckigekc"}],
+  "file_handlers": {"arc.types": {"types": ["application/x-ms-wmz", "text/xml", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/x-mscardfile", "vnd.android.cursor.item/vnd.com.tencent.mobileqq.voicecall.profile", "application/octet-stream", "application/x-msmediaview", "application/x-7z-compressed", "application/x-msmetafile", "audio/*", "application/vnd.ms-project", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/pdf", "application/x-ms-wmd", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/x-msmoney", "application/x-shockwave-flash", "text/x-vcard", "application/x-msclip", "application/vnd.mpohun.certificate", "video/*", "vnd.android.cursor.item/vnd.com.tencent.mobileqq.zchat", "application/vnd.ms-powerpoint", "application/x-msschedule", "application/vnd.mophun.application", "application/x-gzip", "application/x-msaccess", "application/x-gtar", "application/vnd.openxmlformats-officedocument.presentationml.template", "application/vnd.ms-excel", "application/x-mswrite", "application/x-mspublisher", "text/plain", "application/x-tar", "application/vnd.openxmlformats-officedocument.spreadsheetml.template", "application/x-autocad", "application/*", "text/html", "application/vnd.openxmlformats-officedocument.wordprocessingml.template", "application/x-msterminal", "image/*", "application/vnd.openxmlformats-officedocument.presentationml.slideshow", "text/*", "text/csv", "application/zip", "application/x-rar-compressed", "text/css", "application/msword"]}},
+  
+  
+  "arc_metadata": {
+    "apkList": [
+      "tim.apk"
+    ],
+    "enableExternalDirectory": false,
+    "formFactor": "tablet",
+    "name": "TIM",
+    "orientation": "landscape",
+    "packageName": "com.tencent.tim",
+    "resize": "reconfigure",
+    "useGoogleContactsSyncAdapter": true
+  }
+}
