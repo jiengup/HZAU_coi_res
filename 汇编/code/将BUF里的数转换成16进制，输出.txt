@@ -1,0 +1,69 @@
+assume cs:codesg,ds:datasg
+datasg segment
+  BUF db 100
+datasg ends
+
+codesg segment    ；将BUF里的数转换成16进制，输出。
+start:
+mov ax,datasg
+mov ds,ax
+mov bx,offset BUF
+
+	mov ax,ds:[bx]
+
+ 
+;ax除16取余数，进栈
+  
+  mov bh,16  
+  mov di,0 ;统计余数个数 
+s1:
+   mov ah,0
+   div bh    ;al中存放商，ah存放余数，注意范围<256，要扩大用dx+ax，程序需要稍作改动。
+   mov dh,0
+   mov dl,ah
+   push dx
+  
+   inc di 
+   cmp al,0          
+   jz showno
+      
+ jmp s1 
+
+showno:  
+   mov dl,0ah
+   mov ah,02h
+   int 21h
+   mov dl,0dh
+   mov ah,02h
+   int 21h
+              ;回车换行以区别输入输出             
+     
+showno1:
+    pop dx
+    dec di
+   
+   cmp dl,9
+   ja s2
+   add dl,30h
+   jmp tt
+ s2:
+   add dl,37h         ;处理>9的余数
+     
+tt:
+   mov ah,02h
+   int 21h
+  
+   cmp di,0
+   jnz showno1     ;显示出栈的余数字符
+   
+ MOV AX, 4C00H
+ INT 21H
+
+codesg ends
+end start
+
+
+
+
+
+

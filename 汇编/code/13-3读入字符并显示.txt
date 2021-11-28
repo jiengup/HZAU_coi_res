@@ -1,0 +1,33 @@
+DATAS SEGMENT
+    ;此处输入数据段代码  
+    SCANC  DB  ?
+
+DATAS ENDS
+
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+STACKS ENDS
+
+CODES SEGMENT
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+START:
+    MOV AX,DATAS
+    MOV DS,AX
+    ;此处输入代码段代码
+    MOV AH,0			;读入字符
+	INT 16H
+	MOV SCANC,AH		;保存扫描码，AL=ASCII码
+	MOV AH,2			;置光标
+	MOV DH,15			;15行30列
+	MOV DL,30
+	MOV BH,0
+	INT 10H
+	MOV AH,09H		;显示AL中的字符
+	MOV BL,2EH		;绿底黄字
+	MOV CX,1
+	INT 10H
+
+    MOV AH,4CH
+    INT 21H
+CODES ENDS
+    END START

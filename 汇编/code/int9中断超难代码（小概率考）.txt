@@ -1,0 +1,94 @@
+DATAS SEGMENT
+    ;此处输入数据段代码  
+    dw 0,0
+DATAS ENDS
+
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+    db 128 dup(0)
+STACKS ENDS
+
+CODES SEGMENT
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+START:
+    MOV AX,STACKS
+    MOV SS,AX
+    MOV SP,128	;设置堆栈
+    
+    MOV AX,DATAS
+    MOV DS,AX
+    
+    MOV AX,0
+    MOV ES,ax
+    PUSH ES:[9*4]
+    POP DS:[0]
+    PUSH ES:[9*4+2]
+    pop ds:[2]	;保护原INT9中断的中断处理程序的入口地址不丢失
+    mov word ptr es:[9*4],offset int9	
+    mov es:[9*4+2],cs
+    
+    ;此处输入代码段代码
+    mov ax,0b800h
+    mov es,ax
+    mov ah,'a'
+ s:  mov es:[160*12+40*2],ah	;12行40列显示字符
+    call delay
+	inc ah
+	cmp ah,'z'
+	jna s
+
+    mov ax,0
+    mov es,ax
+    push ds:[0]
+    pop es:[9*4]
+    push ds:[2]
+    pop es:[9*4+2]
+
+    MOV AH,4CH
+    INT 21H
+    
+delay:	;跑一个空循环
+	 push dx
+	 push ax
+     mov dx,10h
+     mov ax,0
+ s1: sub ax,1
+     sbb dx,0
+     cmp ax,0
+     jne s1
+     cmp dx,0
+     jne s1
+      pop ax
+      pop dx
+      ret
+      
+int9:
+    push ax
+    push bx
+    push es
+  
+    in al,60h
+    
+    pushf
+    pushf
+    pop bx
+    and bh,11111100b
+    push bx
+    popf
+    call dword ptr ds:[0]
+    
+    cmp al,1
+    jne int9ret
+    
+    mov ax,0b800h
+    mov es,ax
+    inc byte ptr es:[160*12+40*2+1]
+int9ret:
+    pop es
+    pop bx
+    pop ax
+    iret
+    
+CODES ENDS
+    END START
+

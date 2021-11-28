@@ -1,0 +1,65 @@
+DATAS SEGMENT
+    ;此处输入数据段代码  
+    mess1 db 0ah,0dh,'enter interrupt!',0ah,0dh,'$' ;0ah, 0dh 回车换行
+	mess2 db 'exit interrupt!$'
+	mess3 db 0ah,0dh,'Continue or Quit(c/q)?$'
+DATAS ENDS
+
+
+CODES SEGMENT
+start:	mov ax,cs
+	mov ds,ax
+        mov si,offset smigin ;DS:SI指向smigin程序首地址
+                
+        mov ax,0
+        Mov es,ax
+        mov di,200h	;ES:DI指向安装地址首地址(0:200)
+ 		mov cx,offset smiend-offset smigin	;CX存放需要安装程序的长度
+        cld
+        rep movsb 	
+        	
+		mov ax,0
+		mov es,ax
+		mov word ptr es:[7ch*4],200h
+		mov  word ptr  es:[7ch*4+2],0	;修改中断向量表使得中断调用7CH指向已安装终端程序首地址(0:200)
+										;0:[n*4]指向偏移地址, 0:[n*4+2]指向段地址
+       
+		mov ax,datas
+		mov ds,ax
+conti:	mov dx,offset mess1		;显示提示1
+		mov ah,9	;调用DOS中断9号功能, 输出一个DS:DX指向以$结尾的字符串
+		int 21h		
+		int 7ch				;触发7cH号中断，进入中断子程序执行
+		
+		mov dx,offset mess2		;显示提示2
+		mov ah,9
+		int 21h
+		mov dx,offset mess3		;显示提示3
+		mov ah,9
+		int 21h
+		mov ah,1			;调用DOX中断1号功能, 从键盘接受一个输入字符, 送入al中, 键入选择
+		int 21h
+		cmp al,'c'	;如果输入的是'c'则继续执行
+		je conti
+            
+  	    mov ax,4c00h
+	    int 21h
+smigin:	sti				;开中断
+		mov cx,10
+		
+leng:	mov dl,01h			;笑脸符号
+		mov ah,2	;调用DOX中断2号功能, 向平屏幕输出一个存储在dl中的字符
+		int 21h
+		loop leng
+		mov dl,0dh			;回车换行
+		int 21h
+		mov dl,0ah
+		int 21h
+		cli				;关中断
+		iret 				;中断返回
+smiend:	nop
+
+CODES ENDS
+    END START
+
+

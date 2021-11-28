@@ -1,0 +1,123 @@
+;程序1
+assume cs:code
+code segment
+
+time db 'yy/mm/dd hh:mm:ss','$'
+
+cmos db 9,8,7,4,2,0
+
+start:  
+	 mov ax,cs
+     mov ds,ax
+     mov bx,0
+     mov si,0
+     mov cx,6
+a:   push cx
+     mov al,cmos[bx]
+     out 70h,al    ;将al送入地址端口70h
+     in al,71h ;从数据端口71h处读出单元内容
+     mov ah,al
+     mov cl,4
+     shr al,cl ;右移4位
+     and ah,0fh    ;al分成两个表示BCD码值的数据
+     add ax,3030h  ;BCD码+30h=10进制数对应的ASCII码
+     mov cs:[si],ax     ;ASCII码写入time段
+     inc bx
+    add si,3
+     pop cx
+     loop a
+     
+     mov ah,2 ;置光标
+     mov bh,0 ;第0页
+     mov dh,13 ;dh中放行号
+     mov dl,32 ;dl中放列号
+     int 10h
+
+     mov dx,0
+     mov ah,9
+     int 21h
+
+     mov ax,4c00h
+     int 21h
+
+code ends
+end start
+
+
+
+
+
+
+
+
+;程序2
+assume cs:code
+code segment
+
+time db 'yy/mm/dd hh:mm:ss','$'
+
+cmos db 9,8,7,4,2,0
+
+start:  
+	  mov ax,0
+	  mov al,9
+	  mov si,0
+	  mov cx,6
+	s:
+	  push cx
+	  push ax
+	  out 70h,al ;year
+	  in al,71h
+	  
+	  mov ah,al
+	  mov cl,4
+	  shr ah,cl
+	  and al,00001111b
+	  add ah,30h
+	  add al,30h
+	  
+	  mov bx,0b800h
+	  mov es,bx
+	  Mov byte ptr es:[160*12+40*2][si],ah
+      Mov byte ptr es:[160*12+40*2+2][si],al
+      
+      pop ax
+      dec ax
+      jmp s1
+    s0:
+       pop cx
+       add si,6
+       loop s
+       
+       mov ax,4c00h
+       int 21h
+       
+    s1:
+      cmp ax,10
+      ja s0
+      cmp ax,0
+      je s0
+      cmp ax,6
+      ja s2
+      je s3
+      jb s4
+      
+    s2: mov byte ptr es:[160*12+40*2+4][si],'/'     
+      jmp s0
+      
+    s3:
+      sub ax,2
+      jmp s0
+    s4:sub ax,1
+      mov byte ptr es:[160*12+40*2+4][si],':'
+      jmp s0
+    code ends
+    end start
+
+    
+     mov ax,4c00h
+     int 21h
+
+code ends
+end start
+

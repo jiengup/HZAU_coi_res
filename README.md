@@ -4,12 +4,12 @@ a resource repo for HZAU College fo Imformatics
 **写在前面：开源这些资料的目的是想让大家能够省去搜集资料的麻烦，帮助大家更好的关注在课程本身，请保持学术诚信，可以参考，但不要抄袭，只有自己真正掌握了知识才有用。这些资料在老师那里也有备份，如果课程设计太相近可能会面临被直接挂科的风险**
 
 - [C/C++](c_cpp)
-- [计算机导论](introduction to computer science)
+- [计算机导论](./introduction to computer science)
 - [近代史](近代史)
 - [微积分](微积分)
 - [Python](python)
 - [离散数学](离散数学)
-- [数据结构](data structure)
+- [数据结构](./data structure)
 - [大学物理](大学物理)
 - [数据库](数据库)
 - [概率论](概率论)

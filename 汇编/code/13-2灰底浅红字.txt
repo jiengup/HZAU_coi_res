@@ -1,0 +1,30 @@
+DATAS SEGMENT
+    ;此处输入数据段代码  
+    EEE  DB  'Student'	
+DATAS ENDS
+
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+STACKS ENDS
+
+CODES SEGMENT
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+START:
+    MOV AX,DATAS
+    MOV DS,AX
+    ;此处输入代码段代码
+    MOV BX,OFFSET EEE
+	MOV BP,BX
+	MOV BX,SEG EEE
+	MOV ES,BX
+	MOV AH,13H
+	MOV AL,1				;光标跟随
+	MOV BL,8DH			    ;灰底浅红字
+	MOV BH,0				;0页
+	MOV CX,7				;7个字符
+	INT 10H
+
+    MOV AH,4CH
+    INT 21H
+CODES ENDS
+    END START

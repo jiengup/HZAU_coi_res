@@ -1,0 +1,29 @@
+DATAS SEGMENT
+    ;此处输入数据段代码  
+DATAS ENDS
+
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+STACKS ENDS
+
+CODES SEGMENT
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+START:
+    MOV AX,DATAS
+    MOV DS,AX
+    ;此处输入代码段代码
+    MOV AH,2			;置光标
+	MOV DH,12
+	MOV DL,30
+	MOV BH,0
+	INT 10H
+	MOV AH,09H			;显示5个字母a
+	MOV AL,'a'
+	MOV BL,1EH			;蓝底黄字
+	MOV CX,5
+	INT 10H
+
+    MOV AH,4CH
+    INT 21H
+CODES ENDS
+    END START

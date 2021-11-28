@@ -1,0 +1,37 @@
+ASSUME CS:CODES,DS:DATAS,SS:STACKS
+DATAS SEGMENT
+    ;此处输入数据段代码  
+    db 'conversation'
+
+DATAS ENDS
+
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+STACKS ENDS
+
+CODES SEGMENT
+START:
+    MOV AX,DATAS
+    MOV DS,AX
+    ;此处输入代码段代码
+    mov si,0
+    mov cx,12
+    call capital 
+       
+    mov byte ptr [si],'$'
+    mov dx,0
+    mov ah,09 ;调用DOS中断9号功能,显示一个开头指向DS:DX以$符结尾的字符串
+    int 21h
+        
+    MOV AH,4CH
+    INT 21H
+    
+	
+;SI指向字符串首地址, CX存放字符串长度, 将指定字符串转化为全大写
+capital:and byte ptr [si],11011111b
+		Inc si
+		loop capital
+		Ret  
+		
+CODES ENDS
+    END START

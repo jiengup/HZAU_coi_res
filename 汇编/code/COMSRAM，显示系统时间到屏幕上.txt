@@ -1,0 +1,35 @@
+ASSUME CS:CODES,DS:DATAS,SS:STACKS
+DATAS SEGMENT
+    ;此处输入数据段代码  
+DATAS ENDS
+
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+STACKS ENDS
+
+CODES SEGMENT
+START:	MOV AX,DATAS
+		MOV DS,AX
+		;此处输入代码段代码
+		mov al,8  
+		out 70h,al
+		in al,71h	;从CMOS8号地址取出月份
+
+		mov ah,al    ;al中为读出的数据
+		mov cl,4
+		shr ah,cl     ;ah中为月份的十位数码值 
+		and al,00001111b 
+   
+		Add ah,30h
+		Add al,30h
+
+		Mov bx,0b800h
+		Mov es,bx
+		Mov byte ptr es:[160*12+40*2],ah ;显示在12行40列
+		Mov byte ptr es:[160*12+40*2+2],al
+
+
+		MOV AH,4CH
+		INT 21H
+CODES ENDS
+    END START

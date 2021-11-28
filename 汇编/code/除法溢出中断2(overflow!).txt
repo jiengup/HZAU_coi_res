@@ -1,0 +1,63 @@
+DATAS SEGMENT
+    ;此处输入数据段代码  
+DATAS ENDS
+
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+STACKS ENDS
+
+CODES SEGMENT
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+start:   
+		    mov ax,0
+			mov es,ax
+			mov word ptr es:[0],200h
+			mov word ptr es:[2],0
+				;复制中断程序到0000:200
+			mov di,200h
+			mov ax,cs
+			mov ds,ax
+			mov si,offset do0
+         
+	        mov cx,offset do0end-offset do0;       ;设置cx为传输长度
+	        cld                                    ;设置传输方向为正
+	        rep movsb
+	         
+
+
+		          	 ;制造溢出  
+		    mov ax,2  
+		    mov bh,0  
+		    div bh  
+    
+          mov ax,4c00h
+          int 21h
+  do0: 
+        jmp short do0start
+ 	    db  "overflow!"
+do0start:
+        mov ax,cs
+        mov ds,ax
+        mov si,202h
+
+        mov ax,0b800h
+        mov es,ax
+        mov di,12*160+36*2       ;设置es:di指向显存空间的中间位置
+        mov cx,9                 ;设置cx为字符串长度
+    s:  mov al,[si]
+        mov es:[di],al
+        inc si
+        add di,2
+        loop s
+        
+      
+       mov ah,01
+       int 21h
+       
+       MOV AH,4CH
+       INT 21H
+ do0end:nop
+
+CODES ENDS
+    END START
+

@@ -1,0 +1,55 @@
+《【汇编】重写0号中断（除法溢出中断） 》中的中断程序只在程序运行时有效，程序返回后即失效，下面给出程序返回后仍有效的中断程序：
+assume cs:code
+
+code segment
+
+;除法中断在中断向量表中的位置是0000:0000~0000:0003
+;0000:0000~0000:0001存放偏移地址（IP）
+;0000:0002~0000:0003存在段地址（CS）
+
+
+start:	;安装中断程序do0(复制中断程序到0000:200)
+	mov ax,cs	
+	mov ds,ax
+	mov si,offset do0	;DS:SI 指向源程序
+	mov ax,0
+	mov es,ax
+	mov di,200h		;ES:DI 指向安装地址
+	mov cx,offset do0end - offset do0	;设置安装程序的长度
+	cld	;设置标志位DF为0,正向传送
+	rep movsb	;循环CX次进行串传送
+	
+
+	;修改中断向量表使得除法溢出中断处理程序指向do0
+	mov ax,0
+	mov es,ax
+	mov word ptr es:[0],200h 0:0 <- 0:200
+	mov word ptr es:[2],0
+	
+	
+	mov ax,4c00h
+	int 21h
+
+;除法中断处理过程
+do0:	jmp short do0_start
+	db "chu fa yi chu la" ;字符串常量也应该放在不会被访问的区域(0:200 ~ 0:2FF)
+do0_start:mov ax,cs
+	mov ds,ax
+	mov si,202h
+	mov ax,0b800h ;调用显存的段地址为0B800H ~ 0B8FFH
+	mov es,ax
+	mov di,160*12+2*36 ;显示在12行36列的位置(0 ~ 24行, 0~79列)
+	mov cx,16
+s:	mov al,ds:[si]
+	mov es:[di],al
+	inc si
+	add di,2
+	loop s
+	
+	mov ax,4c00h
+	int 21h
+do0end: nop ;制造一个空指令使得上面的offset相减得到代码段的长度
+
+code ends
+
+end start
